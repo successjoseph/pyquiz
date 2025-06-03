@@ -77,7 +77,7 @@ def main():
     print(f"🕓 Average Time per Question: {avg_time}s")
 
     total_questions = len(questions)
-    update_user_stats(username, score, total_questions, correct_answers, total_time)
+    update_user_stats(username, total_score, total_questions, correct_answers, total_time)
     stats = get_user_stats(username)
     print("\n📈 Your Stats:", stats)
 
