@@ -1,19 +1,15 @@
 import os
 import json
 import time
+import pymongofile
 from pymongofile import authenticate_user
 from pymongofile import update_user_stats
+from pymongofile import get_user_stats
 
 
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-
-def get_user_stats(username):
-    user = users.find_one({"username": username})
-    if user:
-        return user.get('stats', {})
-    return {}
 
 
 
@@ -51,8 +47,8 @@ def ask_question(q_data):
     return score, time_taken
 
 def main():
-    user = authenticate_user()
-    if not user:
+    username = authenticate_user()
+    if not username:
         print("No user authenticated. Exiting.")
         return
 
@@ -60,6 +56,7 @@ def main():
     questions = load_questions("questions.json")
     total_score = 0
     total_time = 0.0
+    correct_answers = 0
 
     print("🎮 Welcome to the Math Quiz!")
     print("🧠 You get 10 points per correct answer.\n")
@@ -68,6 +65,8 @@ def main():
         score, time_used = ask_question(q)
         total_score += score
         total_time += time_used
+        if score > 0:
+            correct_answers += 1
 
     avg_time = round(total_time / len(questions), 2)
     accuracy = (total_score / (len(questions) * 10)) * 100
@@ -77,10 +76,11 @@ def main():
     print(f"📊 Accuracy: {accuracy}%")
     print(f"🕓 Average Time per Question: {avg_time}s")
 
+    total_questions = len(questions)
+    update_user_stats(username, score, total_questions, correct_answers, total_time)
+    stats = get_user_stats(username)
+    print("\n📈 Your Stats:", stats)
+
 if __name__ == "__main__":
     main()
 
-
-
-
-update_user_stats(username, score, total_questions, correct_answers, total_time_taken)

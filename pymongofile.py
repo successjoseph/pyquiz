@@ -44,10 +44,30 @@ def login_user(username, password):
         print("Wrong password. Nah, try again.")
         return False
 
+def delete_account(username):
+    user = users.find_one({"username": username})
+    if not user:
+        print("No such user found.")
+        return
+
+    print("\n⚠️ WARNING: Account deletion is permanent.")
+    pw1 = input("Enter your password: ")
+    pw2 = input("Enter it again to confirm: ")
+    pw3 = input("One more time. You sure, bruh?: ")
+
+    if pw1 == pw2 == pw3:
+        if bcrypt.checkpw(pw1.encode('utf-8'), user['password']):
+            users.delete_one({"username": username})
+            print(f"💥 Account '{username}' deleted forever. RIP.")
+        else:
+            print("🚫 Password incorrect. Deletion canceled.")
+    else:
+        print("❌ Passwords didn't match all three times. Deletion aborted.")
+
 
 def authenticate_user():
     while True:
-        action = input("Type 'signup' or 'login' or 'exit': ").lower()
+        action = input("Type 'signup' or 'login' or 'delete' or 'exit': ").lower()
 
         if action == "signup":
             uname = input("Choose a username: ")
@@ -60,14 +80,18 @@ def authenticate_user():
             pw = input("Password: ")
             if login_user(uname, pw):
                 return uname
-                print("You're in. Let's get this bread!")
+
+        elif action == "delete":
+            uname = input("Username of the account to delete: ")
+            delete_account(uname)
 
         elif action == "exit":
             print("Peace out!")
             return None
 
         else:
-            print("Bruh, just type 'signup', 'login', or 'exit'.")
+            print("Invalid choice! Type 'signup', 'login', 'delete', or 'exit'.")
+
 
 def update_user_stats(username, score, total_questions, correct_answers, total_time):
     user = users.find_one({"username": username})
@@ -75,17 +99,17 @@ def update_user_stats(username, score, total_questions, correct_answers, total_t
         print("User not found while updating stats.")
         return
 
-    quizzes_taken = user['stats'].get('quizzes_taken', 0)
-    current_total_score = user['stats'].get('total_score', 0)
-    current_avg_accuracy = user['stats'].get('average_accuracy', 0)
-    current_avg_time = user['stats'].get('average_time_per_question', 0)
+    stats = user['stats']
+    quizzes_taken = stats.get('quizzes_taken', 0)
+    current_total_score = stats.get('total_score', 0)
+    current_avg_accuracy = stats.get('average_accuracy', 0)
+    current_avg_time = stats.get('average_time_per_question', 0)
 
     new_quizzes_taken = quizzes_taken + 1
     new_total_score = current_total_score + score
     new_accuracy = (correct_answers / total_questions) * 100 if total_questions > 0 else 0
     new_time_per_question = total_time / total_questions if total_questions > 0 else 0
 
-    # Cumulative average update
     updated_accuracy = ((current_avg_accuracy * quizzes_taken) + new_accuracy) / new_quizzes_taken
     updated_time = ((current_avg_time * quizzes_taken) + new_time_per_question) / new_quizzes_taken
 
@@ -101,3 +125,8 @@ def update_user_stats(username, score, total_questions, correct_answers, total_t
 
     print("✅ Stats updated.")
 
+def get_user_stats(username):
+    user = users.find_one({"username": username})
+    if user:
+        return user.get('stats', {})
+    return {}
