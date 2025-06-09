@@ -46,14 +46,59 @@ def ask_question(q_data):
     print(f"⏱️ Time taken: {time_taken} seconds\n")
     return score, time_taken
 
+
+def get_quiz_preferences(question_data):
+    print("\n📘 Available Subjects:")
+    for subj in question_data:
+        print(f" - {subj}")
+
+    subject = input("Subject: ").strip().lower()
+
+    if subject not in question_data:
+        print("❌ Invalid subject.")
+        return None, None, None
+
+    print("\n📗 Available Topics:")
+    for topic in question_data[subject]:
+        print(f" - {topic}")
+
+    topic = input("Topic: ").strip().lower()
+
+    if topic not in question_data[subject]:
+        print("❌ Invalid topic.")
+        return None, None, None
+
+    difficulty = input("🎯 Difficulty (easy, medium, hard): ").strip().lower()
+    if difficulty not in question_data[subject][topic]:
+        print("❌ Invalid difficulty.")
+        return None, None, None
+
+    return subject, topic, difficulty
+
+
+
+def get_filtered_questions(data, subject, topic, difficulty):
+    return data[subject][topic][difficulty]
+
+
 def main():
     username = authenticate_user()
     if not username:
         print("No user authenticated. Exiting.")
         return
 
-    
-    questions = load_questions("questions.json")
+    data = load_questions("questions.json")
+
+    subject, topic, difficulty = get_quiz_preferences(data)
+    if not subject:
+        return
+
+    questions = get_filtered_questions(data, subject, topic, difficulty)
+    if not questions:
+        print("❌ No questions available for this combo.")
+        return
+
+
     total_score = 0
     total_time = 0.0
     correct_answers = 0

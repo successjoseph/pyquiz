@@ -1,17 +1,39 @@
-[
-  {
-    "question": "What is 5 + 7?",
-    "options": ["10", "11", "12", "13"],
-    "answer": "12"
+{
+  "mathematics": {
+    "algebra": {
+      "easy": [
+        {
+          "question": "What is 2 + 2?",
+          "options": ["1", "2", "3", "4"],
+          "answer": "4"
+        }
+      ],
+      "medium": [
+        {
+          "question": "What is 2 + 2?",
+          "options": ["1", "2", "3", "4"],
+          "answer": "4"
+        }
+      ],
+      "hard": [
+        {
+          "question": "What is 2 + 2?",
+          "options": ["1", "2", "3", "4"],
+          "answer": "4"
+        }
+      ]
+    },
+    "geometry": {
+      "easy": [],
+      "medium": [],
+      "hard": []
+    }
   },
-  {
-    "question": "What is the square root of 49?",
-    "options": ["6", "7", "8", "9"],
-    "answer": "7"
-  },
-  {
-    "question": "Solve: 9 x 3",
-    "options": ["27", "18", "21", "24"],
-    "answer": "27"
+  "physics": {
+    "motion": {
+      "easy": [],
+      "medium": [],
+      "hard": []
+    }
   }
-]
+}
