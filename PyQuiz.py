@@ -86,17 +86,37 @@ def main():
     if not username:
         print("No user authenticated. Exiting.")
         return
+    
+    raw_data = load_questions("questions.json")
 
-    data = load_questions("questions.json")
-
-    subject, topic, difficulty = get_quiz_preferences(data)
+    subject, topic, difficulty = get_quiz_preferences(raw_data)
     if not subject:
         return
-
-    questions = get_filtered_questions(data, subject, topic, difficulty)
-    if not questions:
+    
+    filtered_questions = get_filtered_questions(raw_data, subject, topic, difficulty)
+    if not filtered_questions:
         print("❌ No questions available for this combo.")
         return
+
+
+    max_available = len(filtered_questions)
+    print(f"📦 {max_available} questions available for this selection.")
+    if max_available == 0:
+        print("❌ No questions available for this selection.")
+        return
+
+    while True:
+        try:
+            num_questions = int(input(f"How many questions do you want? (1 - {max_available}): "))
+            if 1 <= num_questions <= max_available:
+                break
+            else:
+                print(f"Choose between 1 and {max_available}")
+        except ValueError:
+            print("please input a number.")
+
+    questions = filtered_questions[:num_questions]
+
 
 
     total_score = 0
