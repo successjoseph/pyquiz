@@ -1,22 +1,33 @@
 import os
 import json
 import time
-import pymongofile
-from pymongofile import authenticate_user
-from pymongofile import update_user_stats
-from pymongofile import get_user_stats
 
+# Assuming pymongofile is a custom module
+try:
+    import pymongofile
+    from pymongofile import authenticate_user, update_user_stats, get_user_stats
+except ImportError:
+    print("❌ Error: pymongofile module not found. Ensure it is correctly installed or available.")
+    exit()
 
-
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-
-
+# Determine the base directory
+try:
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+except NameError:
+    base_dir = os.getcwd()
 
 def load_questions(filename):
     path = os.path.join(base_dir, filename)
-    with open(path, 'r') as file:
-        return json.load(file)
+    if not os.path.exists(path):
+        print(f"❌ Error: File '{filename}' not found in the directory.")
+        exit()
+    try:
+        with open(path, 'r') as file:
+            return json.load(file)
+    except json.JSONDecodeError:
+        print(f"❌ Error: File '{filename}' is not a valid JSON file.")
+        exit()
+
 
 def ask_question(q_data):
     print("\n" + q_data["question"])
@@ -43,7 +54,7 @@ def ask_question(q_data):
         score = 0
         print("❌ Invalid option.")
 
-    print(f"⏱️ Time taken: {time_taken} seconds\n")
+    print(f"⏱ Time taken: {time_taken} seconds\n")
     return score, time_taken
 
 
@@ -53,7 +64,6 @@ def get_quiz_preferences(question_data):
         print(f" - {subj}")
 
     subject = input("Subject: ").strip().lower()
-
     if subject not in question_data:
         print("❌ Invalid subject.")
         return None, None, None
@@ -63,7 +73,6 @@ def get_quiz_preferences(question_data):
         print(f" - {topic}")
 
     topic = input("Topic: ").strip().lower()
-
     if topic not in question_data[subject]:
         print("❌ Invalid topic.")
         return None, None, None
@@ -74,7 +83,6 @@ def get_quiz_preferences(question_data):
         return None, None, None
 
     return subject, topic, difficulty
-
 
 
 def get_filtered_questions(data, subject, topic, difficulty):
@@ -98,7 +106,6 @@ def main():
         print("❌ No questions available for this combo.")
         return
 
-
     max_available = len(filtered_questions)
     print(f"📦 {max_available} questions available for this selection.")
     if max_available == 0:
@@ -113,17 +120,15 @@ def main():
             else:
                 print(f"Choose between 1 and {max_available}")
         except ValueError:
-            print("please input a number.")
+            print("Please input a number.")
 
     questions = filtered_questions[:num_questions]
-
-
 
     total_score = 0
     total_time = 0.0
     correct_answers = 0
 
-    print("🎮 Welcome to the Math Quiz!")
+    print("🎮 Welcome to the Quiz!")
     print("🧠 You get 10 points per correct answer.\n")
 
     for q in questions:
@@ -148,4 +153,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

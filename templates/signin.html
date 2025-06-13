@@ -1,14 +1,24 @@
+<<<<<<< HEAD
 <html>
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="cssfile.css">
     <link rel="icon" type="image/png" href="logo.png">
     <head>
         <style>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+>>>>>>> error-handlings-and-comments
         body	{
                 text-align: center;
                 margin: 0%;
                 background-color: cyan;
         }
+<<<<<<< HEAD
         </style>
         <title>SIGN-IN PAGE</title>
         
@@ -28,3 +38,26 @@
         </div>
     </body>
 </html>
+=======
+    </style>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login</h2>
+    <div id = "signin-form"></div>
+    <form autocomplete="on" method="POST">
+        Username: <input type="text" ><br>
+        Password: <input type="password" ><br>
+        <button type="submit">Login</button>
+        <table>
+            <tr><th>E-Mail:</th><th><input type="text" name="username" size="30" autofocus required></th></tr>
+            <tr><th>Password:</th><th><input type="password" name="password" size="30" required></th></tr>
+            <tr><th></th><th><input type="reset"value="RESET"><input type="submit" value="Login"></th></tr>
+        </table>
+    </form>
+    <a href="{{ url_for('signup') }}" target="_self">Don't have an account, Sign Up</a>
+    <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+    </div>
+</body>
+</html>
+>>>>>>> error-handlings-and-comments
