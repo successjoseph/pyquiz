@@ -1,0 +1,56 @@
+<html>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="cssfile.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <head>
+        <style>
+        body	{
+                text-align: center;
+                margin: 0%;
+                margin-bottom: 10%;
+                background-color: cyan;
+        }
+        </style>
+        <title>SIGN-UP PAGE</title>
+       
+    </head>
+    <body>
+        <div id = "signup-ancstrcont">
+        <div id = signup-img>
+            <img src="logomerged.png">
+        </div>
+        <div id = "signup-form">
+            <form autocomplete="on" action="Signin.html">
+                <table>
+  	            <tr><th><label for="name"> Fullname:</label></th><th><input type="text" id="name" size="50" autofocus required></th></tr>
+	            <tr><th>E-Mail:</th><th><input type="text" id="email" size="50" required></th></tr>
+                <tr><th>Username:</th><th><input type="text" id="username" size="50" required></th></tr>
+	            <tr><th>Telephone No:</th><th><input type="tel" id="phone" name="phone" placeholder="+2341234567890" pattern="+[0-9]{3}[0-9]{10}" size="50" required>
+                <tr><th>Password:</th><th><input type="password" id="pwd" size="50" required></th></tr>
+	            <tr><th>Tech Career Path:</th><th><select id="careers" required>
+	                <option value="Select Career">Select Tech career</option>
+	                <option value="Mobile App Developer">Mobile App Developer</option>
+	                <option value="Software Developer">Software Developer</option>
+	                <option value="Web Developer">Web Developer</option>
+	                <option value="Data Scientist/Analyst">Data Scientist/Analyst</option>
+	                <option value="ML/AI Engineer">ML/AI Engineer</option>
+	                <option value="Cybersecurity Specialist">Cybersecurity Specialist</option>
+	                <option value="DevOps/Cloud Engineer">DevOps/Cloud Engineer</option>
+	                <option value="Game Developer">Game Developer</option>
+	                <option value="Embedded Systems/IOT Developer">Embedded Systems/IOT Developer</option>
+	                <option value="Database Administrator/Engineer">Database Administrator/Engineer</option>
+	                <option value="UI/UX Developer">UI/UX Developer</option>
+	                <option value="Blockchain Developer">Blockchain Developer</option>
+	                <option value="AR/VR Developer">AR/VR Developer</option>
+	                <option value="Academic/Researcher">Academic/Researcher</option>
+	                <option value="Tech Entrepreneur/ Product Developer">Tech Entrepreneur/ Product Developer</option>
+	                </select></th></tr>
+	            <tr><th>Date Of Birth:</th><th><input type="date" id="date" max="2014-12-31" required></th></tr>
+	            <tr><th>Gender:</th><th><input type="radio" id="male" value="male"><label for="male">Male</label><input type="radio" id="female" value="female"><label for="female">Female</label></th></tr>
+                <tr><th></th><th><input type="reset" value="RESET"><input type="submit" value="SUBMIT" onclick="alert('Your Information has been Submitted, please Sign-in')"></a></th></tr>
+	        </table>
+            </form>
+            <a href="signin.html" target="_self">Already have an account?, Sign In</a>
+        </div>
+    </body>
+</html>
