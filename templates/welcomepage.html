@@ -1,30 +1,30 @@
 <html>
     <head>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="cssfile.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cssfile.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <head>
         <style>
         body	{
                 background-color: #00ffff88;
         }
         </style>
-        <title>Savvydemy</title>
+        <title>Savvydemy, Welcome to PyQuiz</title>
         
     </head>
     <body>
         <div id="topflag">
-            <div id = "topflagimgdiv">
-                <img id="topflagimg1" src="logomerged.png" alt="logo">
-                <img id="topflagimg2" src="textlogo2.png" alt="textlogo">
+            <div id="topflagimgdiv"></div>
+                <img id="topflagimg1" src="{{ url_for('static', filename='logomerged.png') }}" alt="logo">
+                <img id="topflagimg2" src="{{ url_for('static', filename='textlogo2.png') }}" alt="textlogo">
             </div>
         </div>
-        <div id="banner">
-            <div>about</div>
-            <div>programmes</div>
-            <div></div>
-            <div></div>
-            <div>contact</div>
+        <div style="text-align:center; margin-top:20vh;">
+        <h1>🚀 Welcome to PyQuiz</h1>
+        <p>Your journey to brain gains starts here.</p>
+        <a href="{{ url_for('signin') }}">Sign In</a> | 
+        <a href="{{ url_for('signup') }}">Sign Up</a>
+    </div>
         </div>
     </body>
 </html>

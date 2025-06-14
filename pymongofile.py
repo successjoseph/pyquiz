@@ -1,25 +1,48 @@
-import pymongo
-import bcrypt
 from datetime import datetime
 from pymongo import MongoClient
+import bcrypt
 
+<<<<<<< Updated upstream
 
+=======
+# Setup Mongo
+>>>>>>> Stashed changes
 client = MongoClient("mongodb://localhost:27017/")
 db = client["PyQuiz"]
 users = db.users
 
+<<<<<<< Updated upstream
 def create_user(username, password):
     if users.find_one({"username": username}):
         print("That username is taken. Please Pick another.")
         return False
+=======
+def create_user_flask(form_data):
+    username = form_data.get("username")
+    email = form_data.get("email")
+    password = form_data.get("password")
 
-    # Hash password
+    if users.find_one({"$or": [{"username": username}, {"email": email}]}):
+        return False  # Already exists
+>>>>>>> Stashed changes
+
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     user_doc = {
         "username": username,
+<<<<<<< Updated upstream
         "password": hashed_pw,  # store hashed pw bytes
+=======
+        "email": email,
+        "password": hashed_pw,
+>>>>>>> Stashed changes
         "created_at": datetime.utcnow(),
+        "fullname": form_data.get("fullname"),
+        "phone": form_data.get("phone"),
+        "career": form_data.get("career"),
+        "dob": form_data.get("dob"),
+        "gender": form_data.get("gender"),
+        "level": form_data.get("level"),
         "stats": {
             "total_score": 0,
             "quizzes_taken": 0,
@@ -27,19 +50,31 @@ def create_user(username, password):
             "average_time_per_question": 0
         }
     }
+
     users.insert_one(user_doc)
+<<<<<<< Updated upstream
     print(f"User {username} created successfully. Go crush it!")
+=======
+>>>>>>> Stashed changes
     return True
 
-def login_user(username, password):
-    user = users.find_one({"username": username})
+def signup_user(form_data):
+    return create_user_flask(form_data)
+
+def login_user(identifier, password):
+    user = users.find_one({
+        "$or": [{"username": identifier}, {"email": identifier}]
+    })
     if not user:
+<<<<<<< Updated upstream
         print("No user found with that name. Try again.")
+=======
+>>>>>>> Stashed changes
         return False
 
     if bcrypt.checkpw(password.encode('utf-8'), user['password']):
-        print(f"Welcome back, {username}!")
         return True
+<<<<<<< Updated upstream
     else:
         print("Wrong password. Nah, try again.")
         return False
@@ -91,15 +126,17 @@ def authenticate_user():
 
         else:
             print("Invalid choice! Type 'signup', 'login', 'delete', or 'exit'.")
+=======
+    return False
+>>>>>>> Stashed changes
 
 
 def update_user_stats(username, score, total_questions, correct_answers, total_time):
     user = users.find_one({"username": username})
     if not user:
-        print("User not found while updating stats.")
-        return
+        return False
 
-    stats = user['stats']
+    stats = user.get('stats', {})
     quizzes_taken = stats.get('quizzes_taken', 0)
     current_total_score = stats.get('total_score', 0)
     current_avg_accuracy = stats.get('average_accuracy', 0)
@@ -122,11 +159,20 @@ def update_user_stats(username, score, total_questions, correct_answers, total_t
             "stats.average_time_per_question": updated_time
         }}
     )
+<<<<<<< Updated upstream
 
     print("✅ Stats updated.")
+=======
+    return True
+>>>>>>> Stashed changes
 
 def get_user_stats(username):
     user = users.find_one({"username": username})
     if user:
+<<<<<<< Updated upstream
         return user.get('stats', {})
     return {}
+=======
+        return user.get("stats", {})
+    return None
+>>>>>>> Stashed changes

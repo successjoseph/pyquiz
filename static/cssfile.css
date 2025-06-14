@@ -68,6 +68,13 @@ input[type="submit"]:hover ,input[type="reset"]:hover{
     transform: scale(1.1);
 }
 
+table {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+
 /* CSS for signin page*/
 
 #signin-img > img{
@@ -76,11 +83,13 @@ input[type="submit"]:hover ,input[type="reset"]:hover{
 }
 
 #signin-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin: auto;
     position: relative;
-    left: -3%;
-    width: fit-content;
+    width: 100%;
     height: fit-content;
 }
 
@@ -104,11 +113,13 @@ input[type="submit"]:hover ,input[type="reset"]:hover{
 }
 
 #signup-form > form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin: auto;
     position: relative;
-    left: -5%;
-    width: fit-content ;
+    width: 100%;
     height: fit-content;
 }
 
