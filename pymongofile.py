@@ -3,22 +3,26 @@ import bcrypt
 from datetime import datetime
 from pymongo import MongoClient
 
-# Connect to MongoDB
+# Setup Mongo
 client = MongoClient("mongodb://localhost:27017/")
 db = client["PyQuiz"]
 users = db.users
 
-def create_user(username, password):
-    if users.find_one({"username": username}):
-        print("That username is taken. Please pick another.")
-        return False
+def create_user_flask(form_data):
+    username = form_data.get("username")
+    email = form_data.get("email")
+    password = form_data.get("password")
+
+    if users.find_one({"$or": [{"username": username}, {"email": email}]}):
+        return False  # Already exists
 
     # Hash password
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     user_doc = {
         "username": username,
-        "password": hashed_pw,  # Store hashed password
+        "email": email,
+        "password": hashed_pw,
         "created_at": datetime.utcnow(),
         "stats": {
             "total_score": 0,
@@ -28,75 +32,18 @@ def create_user(username, password):
         }
     }
     users.insert_one(user_doc)
-    print(f"User {username} created successfully. You're all set!")
     return True
 
 def login_user(username, password):
     user = users.find_one({"username": username})
     if not user:
-        print("No user found with that name. Please try again.")
         return False
 
     if bcrypt.checkpw(password.encode('utf-8'), user['password']):
         print(f"Welcome back, {username}!")
         return True
-    else:
-        print("Wrong password. Please try again.")
-        return False
+    return False
 
-def delete_account(username):
-    user = users.find_one({"username": username})
-    if not user:
-        print("No such user found.")
-        return
-
-    print("\n⚠ WARNING: Account deletion is permanent.")
-    pw1 = input("Enter your password: ")
-    pw2 = input("Enter it again to confirm: ")
-
-    if pw1 == pw2:
-        if bcrypt.checkpw(pw1.encode('utf-8'), user['password']):
-            users.delete_one({"username": username})
-            print(f"💥 Account '{username}' deleted forever.")
-        else:
-            print("🚫 Password incorrect. Deletion canceled.")
-    else:
-        print("❌ Passwords didn't match. Deletion aborted.")
-
-def authenticate_user():
-    while True:
-        action = input("Type 'signup', 'login', 'delete', or 'exit': ").strip().lower()
-
-        if action == "signup":
-            uname = input("Choose a username: ").strip()
-            if not uname:
-                print("Username cannot be empty.")
-                continue
-
-            pw = input("Choose a password: ").strip()
-            if not pw:
-                print("Password cannot be empty.")
-                continue
-
-            if create_user(uname, pw):
-                return uname
-
-        elif action == "login":
-            uname = input("Username: ").strip()
-            pw = input("Password: ").strip()
-            if login_user(uname, pw):
-                return uname
-
-        elif action == "delete":
-            uname = input("Username of the account to delete: ").strip()
-            delete_account(uname)
-
-        elif action == "exit":
-            print("Goodbye!")
-            return None
-
-        else:
-            print("Invalid choice! Type 'signup', 'login', 'delete', or 'exit'.")
 
 def update_user_stats(username, score, total_questions, correct_answers, total_time):
     user = users.find_one({"username": username})
@@ -127,15 +74,10 @@ def update_user_stats(username, score, total_questions, correct_answers, total_t
             "stats.average_time_per_question": round(updated_time, 2)
         }}
     )
-
-    print("✅ Stats updated successfully.")
+    return True
 
 def get_user_stats(username):
     user = users.find_one({"username": username})
     if user:
-        return user.get('stats', {})
-    print("❌ User not found.")
-    return {}
-
-
-
+        return user.get("stats", {})
+    return None
