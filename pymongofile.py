@@ -2,21 +2,11 @@ from datetime import datetime
 from pymongo import MongoClient
 import bcrypt
 
-<<<<<<< Updated upstream
-
-=======
 # Setup Mongo
->>>>>>> Stashed changes
 client = MongoClient("mongodb://localhost:27017/")
 db = client["PyQuiz"]
 users = db.users
 
-<<<<<<< Updated upstream
-def create_user(username, password):
-    if users.find_one({"username": username}):
-        print("That username is taken. Please Pick another.")
-        return False
-=======
 def create_user_flask(form_data):
     username = form_data.get("username")
     email = form_data.get("email")
@@ -24,18 +14,13 @@ def create_user_flask(form_data):
 
     if users.find_one({"$or": [{"username": username}, {"email": email}]}):
         return False  # Already exists
->>>>>>> Stashed changes
 
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     user_doc = {
         "username": username,
-<<<<<<< Updated upstream
-        "password": hashed_pw,  # store hashed pw bytes
-=======
         "email": email,
         "password": hashed_pw,
->>>>>>> Stashed changes
         "created_at": datetime.utcnow(),
         "fullname": form_data.get("fullname"),
         "phone": form_data.get("phone"),
@@ -52,10 +37,6 @@ def create_user_flask(form_data):
     }
 
     users.insert_one(user_doc)
-<<<<<<< Updated upstream
-    print(f"User {username} created successfully. Go crush it!")
-=======
->>>>>>> Stashed changes
     return True
 
 def signup_user(form_data):
@@ -66,69 +47,11 @@ def login_user(identifier, password):
         "$or": [{"username": identifier}, {"email": identifier}]
     })
     if not user:
-<<<<<<< Updated upstream
-        print("No user found with that name. Try again.")
-=======
->>>>>>> Stashed changes
         return False
 
     if bcrypt.checkpw(password.encode('utf-8'), user['password']):
         return True
-<<<<<<< Updated upstream
-    else:
-        print("Wrong password. Nah, try again.")
-        return False
-
-def delete_account(username):
-    user = users.find_one({"username": username})
-    if not user:
-        print("No such user found.")
-        return
-
-    print("\n⚠️ WARNING: Account deletion is permanent.")
-    pw1 = input("Enter your password: ")
-    pw2 = input("Enter it again to confirm: ")
-    pw3 = input("One more time. You sure, bruh?: ")
-
-    if pw1 == pw2 == pw3:
-        if bcrypt.checkpw(pw1.encode('utf-8'), user['password']):
-            users.delete_one({"username": username})
-            print(f"💥 Account '{username}' deleted forever. RIP.")
-        else:
-            print("🚫 Password incorrect. Deletion canceled.")
-    else:
-        print("❌ Passwords didn't match all three times. Deletion aborted.")
-
-
-def authenticate_user():
-    while True:
-        action = input("Type 'signup' or 'login' or 'delete' or 'exit': ").lower()
-
-        if action == "signup":
-            uname = input("Choose a username: ")
-            pw = input("Choose a password: ")
-            if create_user(uname, pw):
-                return uname
-
-        elif action == "login":
-            uname = input("Username: ")
-            pw = input("Password: ")
-            if login_user(uname, pw):
-                return uname
-
-        elif action == "delete":
-            uname = input("Username of the account to delete: ")
-            delete_account(uname)
-
-        elif action == "exit":
-            print("Peace out!")
-            return None
-
-        else:
-            print("Invalid choice! Type 'signup', 'login', 'delete', or 'exit'.")
-=======
     return False
->>>>>>> Stashed changes
 
 
 def update_user_stats(username, score, total_questions, correct_answers, total_time):
@@ -159,20 +82,10 @@ def update_user_stats(username, score, total_questions, correct_answers, total_t
             "stats.average_time_per_question": updated_time
         }}
     )
-<<<<<<< Updated upstream
-
-    print("✅ Stats updated.")
-=======
     return True
->>>>>>> Stashed changes
 
 def get_user_stats(username):
     user = users.find_one({"username": username})
     if user:
-<<<<<<< Updated upstream
-        return user.get('stats', {})
-    return {}
-=======
         return user.get("stats", {})
     return None
->>>>>>> Stashed changes
